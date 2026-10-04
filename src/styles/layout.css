@@ -4,13 +4,45 @@
   padding: 0 var(--space-5) var(--space-7);
 }
 
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 20;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
 .masthead {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-4) 0;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) 0;
   border-bottom: 1px solid var(--rule);
+}
+
+.theme-toggle .segmented-options {
+  grid-template-columns: repeat(3, auto);
+}
+
+.theme-toggle .segmented-option span {
+  padding: 0 var(--space-3);
+  font-size: 12px;
+}
+
+.output-inner:focus-visible {
+  outline-offset: 4px;
 }
 
 .wordmark {
@@ -85,6 +117,49 @@
 
   .output-inner {
     position: static;
+  }
+
+  /* On phones the export buttons stay pinned to the bottom of the screen, so
+     they're one thumb away while scrolling through the controls. */
+  .export-bar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    padding: var(--space-2) var(--space-4) calc(var(--space-2) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--rule-strong);
+    background: var(--paper);
+  }
+
+  .export-bar .hint,
+  .export-notice {
+    order: -1;
+  }
+
+  .export-notice:empty {
+    display: none;
+  }
+
+  #export-title {
+    display: none;
+  }
+
+  #export .group-head {
+    margin: 0;
+  }
+
+  #export {
+    padding: 0;
+    border: 0;
+  }
+
+  body {
+    padding-bottom: 96px;
+  }
+
+  html {
+    scroll-padding-bottom: 96px;
   }
 }
 
