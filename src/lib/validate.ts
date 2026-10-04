@@ -100,6 +100,6 @@ export function validate<K extends QrType>(type: K, inputs: Inputs): Errors<Inpu
   return validators[type](inputs[type]);
 }
 
-export function hasErrors(errors: Errors<object>): boolean {
+export function hasErrors(errors: Partial<Record<string, string>>): boolean {
   return Object.values(errors).some((message) => message !== undefined);
 }

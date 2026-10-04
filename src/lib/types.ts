@@ -2,6 +2,14 @@ export type QrType = 'url' | 'text' | 'email' | 'phone' | 'wifi';
 
 export const QR_TYPES: readonly QrType[] = ['url', 'text', 'email', 'phone', 'wifi'];
 
+export const TYPE_LABELS: Record<QrType, string> = {
+  url: 'Link',
+  text: 'Text',
+  email: 'Email',
+  phone: 'Phone',
+  wifi: 'Wi-Fi',
+};
+
 export interface UrlInput {
   url: string;
 }

@@ -1,0 +1,323 @@
+/* Shared form controls. Every interactive element is at least 44px tall. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.row > * {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.label-optional {
+  margin-left: var(--space-2);
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+.hint,
+.error {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.hint {
+  color: var(--ink-2);
+}
+
+.error {
+  color: var(--error);
+}
+
+.input-wrap {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  min-height: var(--control-h);
+  padding: 10px 12px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--sheet);
+  transition: border-color var(--speed);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.input:hover,
+.textarea:hover {
+  border-color: var(--ink-2);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--ink);
+}
+
+.input[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+.input.mono {
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+/* Buttons */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-h);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--speed),
+    border-color var(--speed);
+}
+
+.button:hover {
+  background: var(--hover);
+  border-color: var(--ink-2);
+}
+
+.button:active {
+  background: var(--rule);
+}
+
+.button-primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button-primary:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  opacity: 0.88;
+}
+
+.button-primary:active {
+  background: var(--ink);
+  opacity: 0.78;
+}
+
+.button-quiet {
+  border-color: transparent;
+  padding: 0 var(--space-3);
+}
+
+.button:disabled,
+.button:disabled:hover {
+  border-color: var(--rule);
+  background: transparent;
+  color: var(--ink-2);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-primary:disabled,
+.button-primary:disabled:hover {
+  background: var(--rule);
+  color: var(--ink-2);
+}
+
+/* Segmented radio groups */
+
+.segmented {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.segmented legend {
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.segmented-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.segmented-option {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+.segmented-option input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.segmented-option span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--rule-strong);
+  margin-left: -1px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color var(--speed);
+}
+
+.segmented-option:first-child span {
+  margin-left: 0;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.segmented-option:last-child span {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.segmented-option input:hover + span {
+  background: var(--hover);
+}
+
+.segmented-option input:checked + span {
+  position: relative;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.segmented-option input:focus-visible + span {
+  z-index: 1;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.segmented-mono .segmented-option span {
+  font-family: var(--font-mono);
+}
+
+/* Sliders */
+
+.slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.slider-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.slider input[type='range'] {
+  width: 100%;
+  height: var(--control-h);
+  margin: 0;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+/* Checkboxes */
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-h);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+
+/* Colour fields */
+
+.colour-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.colour-row input[type='color'] {
+  flex: none;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 3px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--sheet);
+  cursor: pointer;
+}
+
+.colour-row input[type='color']:hover {
+  border-color: var(--ink-2);
+}
+
+.colour-row input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.colour-row input[type='color']::-webkit-color-swatch {
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+.colour-row input[type='color']::-moz-color-swatch {
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+.colour-row input[type='color']:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.colour-row .input {
+  width: 10ch;
+  min-width: 0;
+  flex: 1 1 auto;
+}
