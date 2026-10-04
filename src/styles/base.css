@@ -11,7 +11,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  /* Faint dot grid, like graph paper or loose QR modules. The preview sheet
+     and inputs have their own solid background, so it only shows on the page. */
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--grid) 1px, transparent 1.4px);
+  background-size: 16px 16px;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 15px;

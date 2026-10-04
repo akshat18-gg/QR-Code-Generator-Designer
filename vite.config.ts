@@ -38,8 +38,8 @@ export default defineConfig({
         short_name: 'Quiet Zone',
         description:
           'Make and style QR codes in the browser, and check they scan before you print them.',
-        theme_color: '#f4f1ea',
-        background_color: '#f4f1ea',
+        theme_color: '#eef3f8',
+        background_color: '#eef3f8',
         display: 'standalone',
         start_url: '/',
         scope: '/',
