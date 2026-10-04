@@ -62,7 +62,6 @@
 }
 
 .group-title {
-  margin-bottom: var(--space-4);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;

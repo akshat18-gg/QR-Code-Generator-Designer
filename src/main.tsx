@@ -7,6 +7,8 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/layout.css';
+import './styles/controls.css';
+import './styles/components.css';
 import App from './App';
 
 const root = document.getElementById('root');
