@@ -1,32 +1,11 @@
 import jsQR from 'jsqr';
-import qrcode from 'qrcode-generator';
 import { describe, expect, it } from 'vitest';
+import { qrPixels } from '../test/qrPixels';
 import { analyse, overflowMessage, qrMode, toQrData } from './qrData';
 import type { EcLevel } from './style';
 
-// Draws the module matrix the same way a renderer would (dark modules on white,
-// 4-module quiet zone) and asks jsQR to read it back.
 function encodeAndDecode(text: string, ecLevel: EcLevel = 'M'): string | undefined {
-  const data = toQrData(text);
-  const qr = qrcode(0, ecLevel);
-  qr.addData(data, qrMode(data));
-  qr.make();
-
-  const scale = 4;
-  const quiet = 4;
-  const count = qr.getModuleCount();
-  const side = (count + quiet * 2) * scale;
-  const pixels = new Uint8ClampedArray(side * side * 4).fill(255);
-  for (let y = 0; y < side; y++) {
-    for (let x = 0; x < side; x++) {
-      const row = Math.floor(y / scale) - quiet;
-      const col = Math.floor(x / scale) - quiet;
-      if (row >= 0 && col >= 0 && row < count && col < count && qr.isDark(row, col)) {
-        const i = (y * side + x) * 4;
-        pixels[i] = pixels[i + 1] = pixels[i + 2] = 0;
-      }
-    }
-  }
+  const { pixels, side } = qrPixels(text, { ecLevel });
   return jsQR(pixels, side, side)?.data;
 }
 
