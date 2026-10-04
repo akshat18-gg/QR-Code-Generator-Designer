@@ -32,7 +32,8 @@
   border-bottom: 1px solid var(--rule);
 }
 
-.theme-toggle .segmented-options {
+/* Beats the generic mono grid rule in controls.css: three options, one row. */
+.theme-toggle .segmented-mono .segmented-options {
   grid-template-columns: repeat(3, auto);
 }
 
@@ -73,6 +74,10 @@
 .output {
   grid-area: output;
   min-width: 0;
+}
+
+.output .group:first-of-type {
+  padding-bottom: var(--space-2);
 }
 
 .output-inner {
@@ -141,15 +146,14 @@
     display: none;
   }
 
-  #export-title {
+  /* With its buttons pinned to the bottom, the export section is empty in the
+     flow; pull it up so it doesn't leave a double gap. */
+  #export .group-head {
     display: none;
   }
 
-  #export .group-head {
-    margin: 0;
-  }
-
   #export {
+    margin-top: calc(-1 * var(--space-5));
     padding: 0;
     border: 0;
   }

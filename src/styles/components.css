@@ -273,7 +273,8 @@
 }
 
 .preview-meta {
-  margin-top: var(--space-2);
+  /* Clears the bottom crop marks, which reach 18px below the sheet. */
+  margin-top: var(--space-5);
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--ink-2);
