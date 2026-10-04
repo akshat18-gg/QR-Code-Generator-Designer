@@ -57,7 +57,7 @@ export const PRESETS: readonly Preset[] = [
     look: {
       fg: '#2b2a28',
       bg: '#fdfcf9',
-      dotStyle: 'dots',
+      dotStyle: 'square',
       cornerSquareStyle: 'extra-rounded',
       cornerSquareColor: null,
       cornerDotStyle: 'dot',
