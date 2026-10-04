@@ -22,8 +22,11 @@ export default defineConfig({
         scope: '/',
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // Only link previews use the share image; the app doesn't need it offline.
+        globIgnores: ['og.png'],
         cleanupOutdatedCaches: true,
+        clientsClaim: true,
       },
     }),
   ],
