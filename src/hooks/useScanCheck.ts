@@ -1,6 +1,6 @@
 import type { Options } from 'qr-code-styling';
 import { useEffect, useState } from 'react';
-import { runDecodeTest, type DecodeResult } from '../lib/scanCheck';
+import type { DecodeResult } from '../lib/scanCheck';
 import { useDebouncedValue } from './useDebouncedValue';
 
 export interface ScanInput {
@@ -25,7 +25,10 @@ export function useScanCheck(input: ScanInput | null): ScanCheckState {
   useEffect(() => {
     if (!settled) return;
     let current = true;
-    runDecodeTest(settled.options, settled.payload)
+    // jsQR is only needed once there's a code, so it loads in its own chunk
+    // instead of delaying the first paint.
+    import('../lib/scanCheck')
+      .then(({ runDecodeTest }) => runDecodeTest(settled.options, settled.payload))
       .catch((): DecodeResult => ({ full: 'unreadable', small: 'skipped' }))
       .then((decode) => {
         if (current) setResult({ input: settled, decode });
