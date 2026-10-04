@@ -80,7 +80,7 @@ export function readRecent(storage: StorageLike | null): RecentItem[] {
   }
 }
 
-export function sameEntry(a: RecentEntry, b: RecentEntry): boolean {
+function sameEntry(a: RecentEntry, b: RecentEntry): boolean {
   return (
     a.type === b.type &&
     JSON.stringify(a.input) === JSON.stringify(b.input) &&

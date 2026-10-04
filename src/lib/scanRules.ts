@@ -13,13 +13,13 @@ import {
 // Roughly a code printed a few centimetres wide, or seen from across a room.
 export const SMALL_SIZE = 200;
 export const CONTRAST_WARN = 4;
-export const CONTRAST_LOW = 2.5;
-export const QUIET_ZONE_MIN = 2;
-export const MODULE_PX_MIN = 3;
+const CONTRAST_LOW = 2.5;
+const QUIET_ZONE_MIN = 2;
+const MODULE_PX_MIN = 3;
 // Share of the error-correction budget a logo may use before it gets risky.
-export const LOGO_SHARE_MAX = 0.5;
+const LOGO_SHARE_MAX = 0.5;
 
-export type HintId =
+type HintId =
   | 'inverted'
   | 'contrast'
   | 'quiet-zone'
@@ -32,7 +32,7 @@ export type HintId =
   | 'small'
   | 'dense';
 
-export interface Fix {
+interface Fix {
   label: string;
   patch: StylePatch;
 }

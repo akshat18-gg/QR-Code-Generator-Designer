@@ -17,7 +17,7 @@ export interface EditorState {
   style: Style;
 }
 
-export type Snapshot = Pick<EditorState, 'type' | 'inputs' | 'style'>;
+type Snapshot = Pick<EditorState, 'type' | 'inputs' | 'style'>;
 
 type SetInput = {
   [K in QrType]: { type: 'setInput'; qrType: K; patch: Partial<Inputs[K]> };

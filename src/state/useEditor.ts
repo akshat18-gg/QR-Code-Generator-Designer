@@ -22,5 +22,3 @@ export function useEditor() {
 
   return { state, dispatch, errors, status, qrOptions, preset };
 }
-
-export type Editor = ReturnType<typeof useEditor>;

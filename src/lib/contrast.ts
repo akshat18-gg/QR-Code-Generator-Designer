@@ -22,7 +22,7 @@ export type InkPart = 'dots' | 'gradient end' | 'corner frames' | 'corner centre
 
 // Every colour that draws dark modules. With a gradient the dots run between
 // the two stops, so the weaker stop is what limits the contrast.
-export function inkColours(style: Style): { part: InkPart; colour: string }[] {
+function inkColours(style: Style): { part: InkPart; colour: string }[] {
   const colours: { part: InkPart; colour: string }[] = [{ part: 'dots', colour: style.fg }];
   if (style.gradient.kind !== 'none') {
     colours.push({ part: 'gradient end', colour: style.gradient.to });

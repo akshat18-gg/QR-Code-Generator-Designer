@@ -18,7 +18,8 @@ function inlineCss(): Plugin {
         const link = new RegExp(`<link rel="stylesheet"[^>]*href="/${fileName}"[^>]*>`);
         if (!link.test(html.source)) continue;
         html.source = html.source.replace(link, () => `<style>${String(file.source)}</style>`);
-        delete bundle[fileName];
+        // Removing the entry is how a Rollup plugin drops an emitted file.
+        Reflect.deleteProperty(bundle, fileName);
       }
     },
   };
