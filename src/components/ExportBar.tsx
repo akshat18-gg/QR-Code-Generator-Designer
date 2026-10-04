@@ -9,11 +9,14 @@ interface ExportBarProps {
   type: QrType;
   status: QrStatus;
   options: Options | null;
+  // Called after a successful download or copy, which is when a code counts as
+  // "made" and goes into the recent list.
+  onExported: () => void;
 }
 
 type Notice = { text: string; tone: 'ok' | 'error' } | null;
 
-export function ExportBar({ type, status, options }: ExportBarProps) {
+export function ExportBar({ type, status, options, onExported }: ExportBarProps) {
   const [notice, setNotice] = useState<Notice>(null);
   const [busy, setBusy] = useState(false);
   const ready = status.kind === 'ready' && options !== null;
@@ -31,6 +34,7 @@ export function ExportBar({ type, status, options }: ExportBarProps) {
       const blob = await renderBlob(options, extension);
       downloadBlob(blob, exportFilename(type, extension));
       setNotice({ text: `Saved ${extension.toUpperCase()}`, tone: 'ok' });
+      onExported();
     } catch {
       setNotice({ text: "Couldn't make the file. Try again.", tone: 'error' });
     } finally {
@@ -51,6 +55,7 @@ export function ExportBar({ type, status, options }: ExportBarProps) {
     try {
       await copyPng(options);
       setNotice({ text: 'Copied', tone: 'ok' });
+      onExported();
     } catch {
       setNotice({
         text: "Couldn't copy. Your browser may have blocked it. Download the PNG instead.",

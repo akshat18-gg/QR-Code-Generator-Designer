@@ -138,8 +138,12 @@
   opacity: 0.78;
 }
 
-.button-quiet {
+.button-quiet,
+.button-quiet:hover {
   border-color: transparent;
+}
+
+.button-quiet {
   padding: 0 var(--space-3);
 }
 
@@ -320,4 +324,16 @@
   width: 10ch;
   min-width: 0;
   flex: 1 1 auto;
+}
+
+.button-danger {
+  border-color: var(--error);
+  background: var(--error);
+  color: var(--sheet);
+}
+
+.button-danger:hover {
+  border-color: var(--error);
+  background: var(--error);
+  opacity: 0.88;
 }

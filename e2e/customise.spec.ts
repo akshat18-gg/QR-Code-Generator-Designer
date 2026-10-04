@@ -166,7 +166,7 @@ test.describe('logo', () => {
           await p
             .locator('input[type=file]')
             .setInputFiles({ name: 'logo.png', mimeType: 'image/png', buffer: await makePng(p) });
-          await expect(p.getByRole('button', { name: 'Remove' })).toBeVisible();
+          await expect(p.getByRole('button', { name: 'Remove', exact: true })).toBeVisible();
         },
       ],
       ['size', slider('Logo size', '0.6')],
@@ -180,7 +180,7 @@ test.describe('logo', () => {
       [
         'remove',
         async (p) => {
-          await p.getByRole('button', { name: 'Remove' }).click();
+          await p.getByRole('button', { name: 'Remove', exact: true }).click();
           await expect(p.getByText('Upload logo')).toBeVisible();
         },
       ],
@@ -202,7 +202,7 @@ test.describe('logo', () => {
     await page
       .locator('input[type=file]')
       .setInputFiles({ name: 'logo.png', mimeType: 'image/png', buffer: await makePng(page) });
-    await expect(page.getByRole('button', { name: 'Remove' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Remove', exact: true })).toBeVisible();
     const svg = await downloadAndDecode(page, 'svg');
     const markup = svg.bytes.toString('utf8');
     expect(markup).toMatch(/<image[^>]+href="data:image\/png;base64,/);

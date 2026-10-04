@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { ConfirmPopover } from './components/ConfirmPopover';
 import { ColourPanel } from './components/ColourPanel';
 import { ContentForm } from './components/ContentForm';
 import { ExportBar } from './components/ExportBar';
@@ -8,12 +9,15 @@ import { PatternPanel } from './components/PatternPanel';
 import { PresetList } from './components/PresetList';
 import { ScanCheck } from './components/ScanCheck';
 import { Preview } from './components/Preview';
+import { RecentList } from './components/RecentList';
 import { SizePanel } from './components/SizePanel';
 import { TypeTabs } from './components/TypeTabs';
 import { useDebouncedValue } from './hooks/useDebouncedValue';
+import { useRecent } from './hooks/useRecent';
 import { useScanCheck } from './hooks/useScanCheck';
 import { toQrOptions, type QrSource } from './lib/qrConfig';
 import { moduleGeometry } from './lib/style';
+import { restoreInputs, type RecentEntry, type RecentItem } from './state/recent';
 import { useEditor } from './state/useEditor';
 
 export default function App() {
@@ -49,6 +53,26 @@ export default function App() {
     [qrOptions, payload],
   );
   const check = useScanCheck(scanInput);
+  const recent = useRecent();
+
+  function saveRecent() {
+    if (!qrOptions) return;
+    const entry = { type: state.type, input: state.inputs[state.type], style } as RecentEntry;
+    void recent.save(entry, qrOptions);
+  }
+
+  function loadRecent(item: RecentItem) {
+    dispatch({
+      type: 'load',
+      snapshot: { type: item.type, inputs: restoreInputs(item, state.inputs), style: item.style },
+    });
+    // On phones the preview is far above the list, so bring it back into view.
+    const preview = document.querySelector('.preview');
+    if (preview && preview.getBoundingClientRect().bottom < 0) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      preview.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
 
   return (
     <div className="app">
@@ -86,12 +110,38 @@ export default function App() {
           <Group id="size" title="Size">
             <SizePanel style={style} dispatch={dispatch} />
           </Group>
+          <Group
+            id="recent"
+            title="Recent"
+            aside={
+              recent.items.length > 0 && (
+                <ConfirmPopover
+                  label="Clear all"
+                  question={`Remove all ${recent.items.length} recent codes? This can't be undone.`}
+                  confirmLabel="Remove all"
+                  onConfirm={recent.clear}
+                />
+              )
+            }
+          >
+            <RecentList
+              items={recent.items}
+              problem={recent.problem}
+              onLoad={loadRecent}
+              onRemove={recent.remove}
+            />
+          </Group>
         </div>
         <aside className="output" aria-label="Preview and export">
           <div className="output-inner">
             <Preview status={status} options={previewOptions} style={style} />
             <Group id="export" title="Export">
-              <ExportBar type={state.type} status={status} options={qrOptions} />
+              <ExportBar
+                type={state.type}
+                status={status}
+                options={qrOptions}
+                onExported={saveRecent}
+              />
             </Group>
             <ScanCheck status={status} style={style} check={check} dispatch={dispatch} />
           </div>
