@@ -1,4 +1,11 @@
-import { NO_LOGO, type Gradient, type Logo, type Style } from '../lib/style';
+import {
+  NO_LOGO,
+  patchStyle,
+  type Gradient,
+  type Logo,
+  type Style,
+  type StylePatch,
+} from '../lib/style';
 import type { Inputs, QrType } from '../lib/types';
 import { NEWSPRINT, type PresetLook } from './presets';
 
@@ -23,6 +30,7 @@ export type Action =
   | { type: 'setStyle'; patch: Partial<Omit<Style, 'gradient' | 'logo'>> }
   | { type: 'setGradient'; patch: Partial<Gradient> }
   | { type: 'setLogo'; patch: Partial<Logo> }
+  | { type: 'patchStyle'; patch: StylePatch }
   | { type: 'clearLogo' }
   | { type: 'swapColours' }
   | { type: 'applyPreset'; look: PresetLook }
@@ -78,6 +86,8 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
         ...state,
         style: { ...state.style, logo: { ...state.style.logo, ...action.patch } },
       };
+    case 'patchStyle':
+      return { ...state, style: patchStyle(state.style, action.patch) };
     case 'clearLogo':
       return { ...state, style: { ...state.style, logo: NO_LOGO } };
     case 'swapColours':

@@ -79,3 +79,18 @@ export function moduleGeometry(size: number, marginModules: number, moduleCount:
   const quietZone = modulePx > 0 ? (size - moduleCount * modulePx) / 2 / modulePx : 0;
   return { marginPx, modulePx, quietZone };
 }
+
+export type StylePatch = Partial<Omit<Style, 'gradient' | 'logo'>> & {
+  gradient?: Partial<Gradient>;
+  logo?: Partial<Logo>;
+};
+
+export function patchStyle(style: Style, patch: StylePatch): Style {
+  const { gradient, logo, ...rest } = patch;
+  return {
+    ...style,
+    ...rest,
+    gradient: { ...style.gradient, ...gradient },
+    logo: { ...style.logo, ...logo },
+  };
+}
