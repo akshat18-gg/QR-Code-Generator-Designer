@@ -21,6 +21,7 @@
 /* Type tabs */
 
 .type-tabs {
+  position: relative;
   display: flex;
   border-bottom: 1px solid var(--rule);
   overflow-x: auto;
@@ -49,8 +50,19 @@
 }
 
 .type-tab[aria-selected='true'] {
-  border-bottom-color: var(--accent);
   color: var(--ink);
+}
+
+/* 1px wide, scaled to the tab's width, so moving it is a pure transform. */
+.type-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform var(--slide) ease-out;
 }
 
 .type-tab:focus-visible {
@@ -96,8 +108,11 @@
 }
 
 .preset:hover {
-  border-color: var(--ink-2);
-  background: var(--hover);
+  border-color: var(--accent);
+}
+
+.preset:hover .preset-thumb {
+  transform: translateY(-2px);
 }
 
 .preset[aria-pressed='true'] {
@@ -108,6 +123,7 @@
 .preset-thumb {
   width: 56px;
   height: 56px;
+  transition: transform var(--speed) ease-out;
 }
 
 .preset-thumb svg {
@@ -249,6 +265,16 @@
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* New drawings are stacked on top of the old one and faded in. */
+.preview-qr {
+  position: relative;
+}
+
+.preview-qr svg {
+  position: absolute;
+  inset: 0;
 }
 
 .preview-qr[hidden] {

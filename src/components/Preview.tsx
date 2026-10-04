@@ -26,7 +26,7 @@ function placeholderText(status: QrStatus): string {
 export function Preview({ status, options, style }: PreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
   const ready = status.kind === 'ready';
-  useQrSvg(ref, ready ? options : null);
+  useQrSvg(ref, ready ? options : null, true);
 
   return (
     <figure className="preview">

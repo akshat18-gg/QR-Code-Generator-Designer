@@ -1,4 +1,4 @@
-import { useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { QR_TYPES, TYPE_LABELS, type QrType } from '../lib/types';
 
 interface TypeTabsProps {
@@ -11,6 +11,24 @@ const PANEL_ID = 'content-panel';
 
 export function TypeTabs({ value, onChange, children }: TypeTabsProps) {
   const refs = useRef<Partial<Record<QrType, HTMLButtonElement | null>>>({});
+  const list = useRef<HTMLDivElement>(null);
+  const [underline, setUnderline] = useState<{ left: number; width: number } | null>(null);
+
+  // The underline is one element that slides to the selected tab. It's moved
+  // with transform so the slide stays on the compositor.
+  useLayoutEffect(() => {
+    const element = list.current;
+    if (!element) return;
+    const measure = () => {
+      const tab = refs.current[value];
+      if (tab) setUnderline({ left: tab.offsetLeft, width: tab.offsetWidth });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    document.fonts.ready.then(measure, () => undefined);
+    return () => observer.disconnect();
+  }, [value]);
 
   // Arrow keys, Home and End move between tabs, following the ARIA tabs pattern
   // with automatic activation.
@@ -33,7 +51,7 @@ export function TypeTabs({ value, onChange, children }: TypeTabsProps) {
 
   return (
     <div className="stack">
-      <div className="type-tabs" role="tablist" aria-label="Code type">
+      <div className="type-tabs" role="tablist" aria-label="Code type" ref={list}>
         {QR_TYPES.map((type) => {
           const selected = type === value;
           return (
@@ -56,6 +74,13 @@ export function TypeTabs({ value, onChange, children }: TypeTabsProps) {
             </button>
           );
         })}
+        {underline && (
+          <span
+            className="type-underline"
+            aria-hidden="true"
+            style={{ transform: `translateX(${underline.left}px) scaleX(${underline.width})` }}
+          />
+        )}
       </div>
       <div role="tabpanel" id={PANEL_ID} aria-labelledby={`tab-${value}`}>
         {children}
