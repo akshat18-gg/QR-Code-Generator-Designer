@@ -6,10 +6,12 @@ import { Group } from './components/Group';
 import { LogoPanel } from './components/LogoPanel';
 import { PatternPanel } from './components/PatternPanel';
 import { PresetList } from './components/PresetList';
+import { ScanCheck } from './components/ScanCheck';
 import { Preview } from './components/Preview';
 import { SizePanel } from './components/SizePanel';
 import { TypeTabs } from './components/TypeTabs';
 import { useDebouncedValue } from './hooks/useDebouncedValue';
+import { useScanCheck } from './hooks/useScanCheck';
 import { toQrOptions, type QrSource } from './lib/qrConfig';
 import { moduleGeometry } from './lib/style';
 import { useEditor } from './state/useEditor';
@@ -39,6 +41,14 @@ export default function App() {
     const { modulePx } = moduleGeometry(previewStyle.size, previewStyle.margin, source.moduleCount);
     return modulePx >= 1 ? toQrOptions(source, previewStyle) : null;
   }, [source, debouncedStyle, ecLevel]);
+
+  // The scan check reads back the exact options the export buttons use.
+  const payload = status.kind === 'ready' ? status.payload : null;
+  const scanInput = useMemo(
+    () => (qrOptions && payload !== null ? { options: qrOptions, payload } : null),
+    [qrOptions, payload],
+  );
+  const check = useScanCheck(scanInput);
 
   return (
     <div className="app">
@@ -83,6 +93,7 @@ export default function App() {
             <Group id="export" title="Export">
               <ExportBar type={state.type} status={status} options={qrOptions} />
             </Group>
+            <ScanCheck status={status} style={style} check={check} dispatch={dispatch} />
           </div>
         </aside>
       </main>

@@ -11,7 +11,9 @@ test.describe('clipboard', () => {
     await fillInputs(page, { type: 'text', values: { text: 'வணக்கம் 😀' } });
     await expectPreviewReady(page);
     await page.getByRole('button', { name: 'Copy' }).click();
-    await expect(page.getByRole('status')).toHaveText('Copied');
+    await expect(page.getByRole('region', { name: 'Export' }).getByRole('status')).toHaveText(
+      'Copied',
+    );
 
     const base64 = await page.evaluate(async () => {
       const [item] = await navigator.clipboard.read();
@@ -26,7 +28,9 @@ test.describe('clipboard', () => {
     expect(decoded.text).toBe('வணக்கம் 😀');
     expect(decoded.width).toBe(512);
 
-    await expect(page.getByRole('status')).toHaveText('', { timeout: 4000 });
+    await expect(page.getByRole('region', { name: 'Export' }).getByRole('status')).toHaveText('', {
+      timeout: 4000,
+    });
   });
 });
 
@@ -37,7 +41,7 @@ test('explains when the browser cannot copy images', async ({ page }) => {
   await page.goto('/');
   await fillInputs(page, { type: 'url', values: { url: 'example.com' } });
   await page.getByRole('button', { name: 'Copy' }).click();
-  await expect(page.getByRole('status')).toHaveText(
+  await expect(page.getByRole('region', { name: 'Export' }).getByRole('status')).toHaveText(
     "This browser can't copy images. Download the PNG instead.",
   );
 });

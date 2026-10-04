@@ -87,3 +87,18 @@
     position: static;
   }
 }
+
+/* On desktop the output column is sticky, so the preview shrinks on short
+   screens to keep the scan check and export buttons in view. */
+@media (min-width: 861px) {
+  .preview-box {
+    max-width: min(360px, 36vh);
+  }
+
+  .output-inner {
+    max-height: calc(100vh - 2 * var(--space-5));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}

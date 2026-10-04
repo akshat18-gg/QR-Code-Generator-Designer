@@ -114,14 +114,20 @@ test('swap colours changes the preview and swapping back restores it', async ({ 
   await expectPreviewReady(page);
   const before = await previewMarkup(page);
 
-  await page.getByRole('button', { name: 'Swap colours' }).click();
+  await page
+    .getByRole('region', { name: 'Colour' })
+    .getByRole('button', { name: 'Swap colours' })
+    .click();
   await expect(page.getByRole('textbox', { name: 'Dots', exact: true })).toHaveValue('#ffffff');
   await expect(page.getByRole('textbox', { name: 'Background', exact: true })).toHaveValue(
     '#1a1916',
   );
   await expect.poll(() => previewMarkup(page)).not.toBe(before);
 
-  await page.getByRole('button', { name: 'Swap colours' }).click();
+  await page
+    .getByRole('region', { name: 'Colour' })
+    .getByRole('button', { name: 'Swap colours' })
+    .click();
   await expect.poll(() => previewMarkup(page)).toBe(before);
   expect((await downloadAndDecode(page, 'png')).text).toBe(EXPECTED);
 });
