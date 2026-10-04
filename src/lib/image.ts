@@ -44,10 +44,10 @@ export async function rasterise(src: string, maxSide: number): Promise<string> {
   return canvas.toDataURL('image/png');
 }
 
-export async function readLogo(file: File): Promise<string> {
-  const url = URL.createObjectURL(file);
+export async function rasteriseBlob(blob: Blob, maxSide: number): Promise<string> {
+  const url = URL.createObjectURL(blob);
   try {
-    return await rasterise(url, 512);
+    return await rasterise(url, maxSide);
   } finally {
     URL.revokeObjectURL(url);
   }

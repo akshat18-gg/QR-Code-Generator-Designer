@@ -1,5 +1,5 @@
 import { useId, useState, type ChangeEvent, type Dispatch } from 'react';
-import { checkLogoFile, readLogo } from '../lib/image';
+import { checkLogoFile, rasteriseBlob } from '../lib/image';
 import { EC_RECOVERY, type Style } from '../lib/style';
 import type { Action } from '../state/editor';
 import { Slider } from './Slider';
@@ -28,7 +28,7 @@ export function LogoPanel({ style, dispatch }: LogoPanelProps) {
 
     setReading(true);
     try {
-      const src = await readLogo(file);
+      const src = await rasteriseBlob(file, 512);
       dispatch({ type: 'setLogo', patch: { src, name: file.name } });
     } catch {
       setError("Couldn't read that image. Try another file.");
