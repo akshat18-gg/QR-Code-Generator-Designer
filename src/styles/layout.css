@@ -24,38 +24,177 @@
 
 .masthead {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-3) 0;
+  gap: var(--space-4);
+  padding: var(--space-5) 0 var(--space-4);
   border-bottom: 1px solid var(--rule);
 }
 
-/* Beats the generic mono grid rule in controls.css: three options, one row. */
-.theme-toggle .segmented-mono .segmented-options {
-  grid-template-columns: repeat(3, auto);
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
 }
 
-.theme-toggle .segmented-option span {
-  padding: 0 var(--space-3);
-  font-size: 12px;
+.title {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.tagline {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-2);
+  white-space: pre;
+}
+
+/* Logo mark: a QR finder pattern. On load its modules pop in along the
+   diagonal, then a scan line sweeps down once; hovering replays the sweep.
+   Only transform and opacity animate, and the box has a fixed size. */
+.mark {
+  flex: none;
+  width: 48px;
+  height: 48px;
+}
+
+.mark-module {
+  fill: var(--ink);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: module-in 220ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+
+.mark-scan {
+  fill: var(--accent);
+  opacity: 0;
+  animation: scan 320ms ease-in-out 620ms;
+}
+
+.mark:hover .mark-scan {
+  animation: scan-again 420ms ease-in-out;
+}
+
+@keyframes module-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+
+@keyframes scan {
+  15%,
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(9px);
+  }
+}
+
+/* Same sweep under a new name, so hovering restarts it. */
+@keyframes scan-again {
+  15%,
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(9px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-module,
+  .mark-scan,
+  .mark:hover .mark-scan {
+    animation: none;
+  }
+}
+
+/* Theme toggle: sun in light mode, moon in dark. The disc grows, the rays
+   shrink away and a masked circle slides in to cut the crescent. */
+.theme-toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 0;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  background: var(--sheet);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color var(--speed),
+    border-color var(--speed);
+}
+
+.theme-toggle:hover {
+  border-color: var(--ink-2);
+  background: var(--hover);
+}
+
+.theme-toggle svg {
+  overflow: visible;
+}
+
+.theme-disc,
+.theme-cut,
+.theme-rays {
+  transform-box: view-box;
+  transform-origin: 12px 12px;
+  transition:
+    transform var(--morph) ease-in-out,
+    opacity var(--morph) ease-in-out;
+}
+
+.theme-disc {
+  fill: currentColor;
+}
+
+.theme-cut {
+  transform: translate(9px, -9px);
+}
+
+.theme-rays {
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+[data-theme-icon='dark'] .theme-disc {
+  transform: scale(1.7);
+}
+
+[data-theme-icon='dark'] .theme-cut {
+  transform: none;
+}
+
+[data-theme-icon='dark'] .theme-rays {
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.4);
+}
+
+/* Added for one switch only (see useTheme), so colours fade instead of snap.
+   The toggle keeps its own transitions so the icon still morphs. */
+.theme-fade body,
+.theme-fade body *:not(.theme-toggle, .theme-toggle *),
+.theme-fade body *::before,
+.theme-fade body *::after {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    fill 200ms ease !important;
 }
 
 .output-inner:focus-visible {
   outline-offset: 4px;
-}
-
-.wordmark {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.wordmark span {
-  color: var(--ink-2);
-  font-weight: 400;
 }
 
 .workspace {

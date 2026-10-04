@@ -5,13 +5,13 @@ import { ContentForm } from './components/ContentForm';
 import { ExportBar } from './components/ExportBar';
 import { Group } from './components/Group';
 import { LogoPanel } from './components/LogoPanel';
+import { Masthead } from './components/Masthead';
 import { PatternPanel } from './components/PatternPanel';
 import { PresetList } from './components/PresetList';
 import { Preview } from './components/Preview';
 import { RecentList } from './components/RecentList';
 import { ScanCheck } from './components/ScanCheck';
 import { SizePanel } from './components/SizePanel';
-import { ThemeToggle } from './components/ThemeToggle';
 import { TypeTabs } from './components/TypeTabs';
 import { usePreviewOptions } from './hooks/usePreviewOptions';
 import { useRecent } from './hooks/useRecent';
@@ -58,12 +58,7 @@ export default function App() {
       <a className="skip-link" href="#output">
         Skip to preview
       </a>
-      <header className="masthead">
-        <h1 className="wordmark">
-          Quiet Zone <span>QR codes that scan</span>
-        </h1>
-        <ThemeToggle />
-      </header>
+      <Masthead />
       <main className="workspace">
         <div className="controls">
           <Group id="content" title="Content">
