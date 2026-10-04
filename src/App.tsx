@@ -11,6 +11,7 @@ import { ScanCheck } from './components/ScanCheck';
 import { Preview } from './components/Preview';
 import { RecentList } from './components/RecentList';
 import { SizePanel } from './components/SizePanel';
+import { ThemeToggle } from './components/ThemeToggle';
 import { TypeTabs } from './components/TypeTabs';
 import { useDebouncedValue } from './hooks/useDebouncedValue';
 import { useRecent } from './hooks/useRecent';
@@ -76,10 +77,14 @@ export default function App() {
 
   return (
     <div className="app">
+      <a className="skip-link" href="#output">
+        Skip to preview
+      </a>
       <header className="masthead">
         <h1 className="wordmark">
           Quiet Zone <span>QR codes that scan</span>
         </h1>
+        <ThemeToggle />
       </header>
       <main className="workspace">
         <div className="controls">
@@ -132,8 +137,10 @@ export default function App() {
             />
           </Group>
         </div>
-        <aside className="output" aria-label="Preview and export">
-          <div className="output-inner">
+        <aside className="output">
+          {/* Focusable so keyboard users can scroll it when it's taller than the
+              screen; also the skip link's target. */}
+          <div className="output-inner" id="output" role="region" aria-label="Preview" tabIndex={0}>
             <Preview status={status} options={previewOptions} style={style} />
             <Group id="export" title="Export">
               <ExportBar

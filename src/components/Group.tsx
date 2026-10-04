@@ -10,7 +10,7 @@ interface GroupProps {
 export function Group({ id, title, aside, children }: GroupProps) {
   const headingId = `${id}-title`;
   return (
-    <section className="group" aria-labelledby={headingId}>
+    <section className="group" id={id} aria-labelledby={headingId}>
       <div className="group-head">
         <h2 className="group-title" id={headingId}>
           {title}

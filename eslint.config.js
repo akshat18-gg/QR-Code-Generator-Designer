@@ -27,6 +27,10 @@ export default tseslint.config(
       reactRefresh.configs.vite,
       jsxA11y.flatConfigs.strict,
     ],
+    rules: {
+      // A scrollable region has to be focusable for keyboard users to scroll it.
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel', 'region'] }],
+    },
   },
   {
     files: ['e2e/**/*.ts', '*.config.ts'],
