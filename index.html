@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiet Zone · QR code generator</title>
+    <meta
+      name="description"
+      content="Make QR codes for links, text, email, phone numbers and Wi-Fi. Style them, check they scan, and download PNG or SVG. Runs in your browser."
+    />
+    <script>
+      // Runs before first paint so the page never flashes the wrong theme.
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem('quietzone:theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Quiet Zone needs JavaScript to draw QR codes.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
