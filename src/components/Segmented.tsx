@@ -7,7 +7,6 @@ interface SegmentedProps<T extends string> {
   onChange: (value: T) => void;
   hint?: string;
   mono?: boolean;
-  hideLegend?: boolean;
 }
 
 export function Segmented<T extends string>({
@@ -17,7 +16,6 @@ export function Segmented<T extends string>({
   onChange,
   hint,
   mono = false,
-  hideLegend = false,
 }: SegmentedProps<T>) {
   const name = useId();
   const hintId = `${name}-hint`;
@@ -27,7 +25,7 @@ export function Segmented<T extends string>({
       className={mono ? 'segmented segmented-mono' : 'segmented'}
       aria-describedby={hint ? hintId : undefined}
     >
-      <legend className={hideLegend ? 'visually-hidden' : 'label'}>{legend}</legend>
+      <legend className="label">{legend}</legend>
       <div className="segmented-options">
         {options.map((option) => (
           <label className="segmented-option" key={option.value}>

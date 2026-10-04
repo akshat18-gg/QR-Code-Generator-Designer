@@ -1,50 +1,65 @@
 import { useEffect, useState } from 'react';
 
-export type ThemeChoice = 'auto' | 'light' | 'dark';
+export type Theme = 'light' | 'dark';
 
 // Must match the inline script in index.html, which applies the theme before
 // React loads so the page never flashes the wrong colours.
 const THEME_KEY = 'quietzone:theme';
-const PAPER = { light: '#f4f1ea', dark: '#1f1e1b' };
+const PAPER: Record<Theme, string> = { light: '#eef3f8', dark: '#0d1520' };
+const FADE_MS = 200;
 
-function readChoice(): ThemeChoice {
+const systemQuery = () => window.matchMedia('(prefers-color-scheme: dark)');
+
+function readStored(): Theme | null {
   try {
     const stored = localStorage.getItem(THEME_KEY);
-    return stored === 'light' || stored === 'dark' ? stored : 'auto';
+    return stored === 'light' || stored === 'dark' ? stored : null;
   } catch {
-    return 'auto';
+    return null;
   }
 }
 
-function storeChoice(choice: ThemeChoice) {
+function store(theme: Theme) {
   try {
-    if (choice === 'auto') localStorage.removeItem(THEME_KEY);
-    else localStorage.setItem(THEME_KEY, choice);
+    localStorage.setItem(THEME_KEY, theme);
   } catch {
     // Storage blocked: the choice still applies for this visit.
   }
 }
 
+// Fades colours for one theme switch only. A permanent transition on every
+// element would also slow down hover states and fight other transitions.
+function fadeColours() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const root = document.documentElement;
+  root.classList.add('theme-fade');
+  window.setTimeout(() => root.classList.remove('theme-fade'), FADE_MS + 50);
+}
+
 export function useTheme() {
-  const [choice, setChoice] = useState<ThemeChoice>(readChoice);
+  // null until the user picks one: follow the system setting.
+  const [chosen, setChosen] = useState<Theme | null>(readStored);
+  const [system, setSystem] = useState<Theme>(() => (systemQuery().matches ? 'dark' : 'light'));
+  const theme = chosen ?? system;
 
   useEffect(() => {
-    const query = window.matchMedia('(prefers-color-scheme: dark)');
-    function apply() {
-      const theme = choice === 'auto' ? (query.matches ? 'dark' : 'light') : choice;
-      document.documentElement.dataset.theme = theme;
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', PAPER[theme]);
-    }
-    apply();
-    if (choice !== 'auto') return;
-    query.addEventListener('change', apply);
-    return () => query.removeEventListener('change', apply);
-  }, [choice]);
+    const query = systemQuery();
+    const onChange = () => setSystem(query.matches ? 'dark' : 'light');
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
 
-  function choose(next: ThemeChoice) {
-    storeChoice(next);
-    setChoice(next);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', PAPER[theme]);
+  }, [theme]);
+
+  function toggle() {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    fadeColours();
+    store(next);
+    setChosen(next);
   }
 
-  return { choice, choose };
+  return { theme, toggle };
 }
