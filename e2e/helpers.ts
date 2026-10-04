@@ -101,8 +101,10 @@ export function payloadFor(input: TypedInput): string {
   return buildPayload(input.type, { ...EMPTY_INPUTS, [input.type]: input.values });
 }
 
+// While a new drawing fades in, the old one is still underneath it, so the
+// newest svg is the last one.
 export async function expectPreviewReady(page: Page) {
-  await expect(page.getByTestId('preview').locator('svg')).toBeVisible();
+  await expect(page.getByTestId('preview').locator('svg').last()).toBeVisible();
 }
 
 // Playwright logs this itself when the config blocks service workers.
@@ -123,7 +125,11 @@ export function collectConsoleProblems(page: Page): string[] {
 // qr-code-styling numbers its clip-path ids per instance, so strip the counter
 // to compare what is actually drawn.
 export async function previewMarkup(page: Page): Promise<string> {
-  const html = await page.getByTestId('preview').innerHTML();
+  const html = await page
+    .getByTestId('preview')
+    .locator('svg')
+    .last()
+    .evaluate((svg) => svg.outerHTML);
   return html.replace(/-color(-\d+)+/g, '-color');
 }
 

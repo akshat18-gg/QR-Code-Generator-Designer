@@ -47,7 +47,7 @@ test('clicking a recent code restores the type, inputs and every setting', async
     .locator('input[type=file]')
     .setInputFiles({ name: 'logo.png', mimeType: 'image/png', buffer: await makePng(page) });
   await expect(page.getByRole('button', { name: 'Remove', exact: true })).toBeVisible();
-  await expect(page.getByTestId('preview').locator('svg')).toHaveAttribute('width', '768');
+  await expect(page.getByTestId('preview').locator('svg').last()).toHaveAttribute('width', '768');
   const saved = await previewMarkup(page);
   await download(page, 'SVG');
   await expect(recentList(page)).toHaveCount(1);

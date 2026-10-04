@@ -50,22 +50,70 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('theme toggle switches, persists and can go back to the system setting', async ({ page }) => {
+test('first visit follows the system setting, including live changes', async ({ page }) => {
+  const html = page.locator('html');
+  const toggle = page.getByRole('button', { name: /^Switch to (dark|light) theme$/ });
+
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/');
+  await expect(html).toHaveAttribute('data-theme', 'dark');
+  await expect(toggle).toHaveAccessibleName('Switch to light theme');
+
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(html).toHaveAttribute('data-theme', 'light');
+  await expect(toggle).toHaveAccessibleName('Switch to dark theme');
+});
+
+test('the toggle switches the theme and remembers it after a reload', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/');
   const html = page.locator('html');
   await expect(html).toHaveAttribute('data-theme', 'light');
 
-  await page.getByRole('radio', { name: 'Dark' }).check();
+  await page.getByRole('button', { name: 'Switch to dark theme' }).click();
   await expect(html).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#0d1520');
+
   await page.reload();
   await expect(html).toHaveAttribute('data-theme', 'dark');
-  await expect(page.getByRole('radio', { name: 'Dark' })).toBeChecked();
+  await expect(page.getByRole('button', { name: 'Switch to light theme' })).toBeVisible();
 
-  await page.getByRole('radio', { name: 'Auto' }).check();
-  await expect(html).toHaveAttribute('data-theme', 'light');
-  await page.emulateMedia({ colorScheme: 'dark' });
+  // Once chosen, the system setting no longer overrides it.
+  await page.emulateMedia({ colorScheme: 'light' });
   await expect(html).toHaveAttribute('data-theme', 'dark');
+
+  await page.getByRole('button', { name: 'Switch to light theme' }).click();
+  await expect(html).toHaveAttribute('data-theme', 'light');
+  await page.reload();
+  await expect(html).toHaveAttribute('data-theme', 'light');
+});
+
+test('the toggle is a 44px round button with a focus ring', async ({ page }) => {
+  await page.goto('/');
+  const toggle = page.getByRole('button', { name: /^Switch to/ });
+  const box = await toggle.boundingBox();
+  expect(box && Math.round(box.width) >= 44 && Math.round(box.height) >= 44).toBe(true);
+  await toggle.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  const outline = await toggle.evaluate((el) => getComputedStyle(el).outlineStyle);
+  expect(outline).not.toBe('none');
+});
+
+test('with reduced motion the header shows its final state straight away', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expect(page.locator('.tagline [aria-hidden]')).toHaveText('QR codes that scan.');
+  const animations = await page.evaluate(
+    () => document.getAnimations().filter((a) => a.playState === 'running').length,
+  );
+  expect(animations).toBe(0);
+});
+
+test('the tagline decodes to the real text', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.tagline [aria-hidden]')).toHaveText('QR codes that scan.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quiet Zone');
 });
 
 test('the saved theme is applied before first paint', async ({ page }) => {

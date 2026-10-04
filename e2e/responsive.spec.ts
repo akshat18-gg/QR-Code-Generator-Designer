@@ -105,15 +105,3 @@ test.describe('phone layout', () => {
     expect(small).toEqual([]);
   });
 });
-
-test('the theme toggle stays on one row in the header', async ({ page }) => {
-  await page.goto('/');
-  const boxes = await Promise.all(
-    ['Auto', 'Light', 'Dark'].map((name) =>
-      page
-        .getByRole('radio', { name })
-        .evaluate((el) => el.parentElement?.getBoundingClientRect().top),
-    ),
-  );
-  expect(new Set(boxes).size).toBe(1);
-});
