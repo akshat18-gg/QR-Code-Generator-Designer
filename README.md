@@ -39,7 +39,8 @@ I built this for the GDG on Campus SRM recruitment task (Frontend, Task 1: QR Co
 - Scan check: rule-based hints plus a real decode test, with one-click fixes.
 - The last 12 codes you downloaded or copied, saved in the browser and restored with one click.
 - A "drafting table" look: pale blue-white paper with a faint dot grid, or deep navy in dark mode.
-- A header with a finder-pattern logo that assembles itself and gets a scan-line sweep, and a tagline that decodes in. It plays once, and not at all with reduced motion.
+- A header with a finder-pattern logo that assembles itself and gets a scan-line sweep, and a tagline that decodes in. It plays once (hovering the logo replays the sweep), and not at all with reduced motion.
+- Small touches, all 200 ms or less: the tab underline slides to the selected tab, preset cards lift their thumbnail on hover, and the preview cross-fades when the code changes.
 - Light and dark theme, works on phones down to 360 px, keyboard and screen reader friendly.
 - Works offline after the first visit and can be installed as an app.
 
@@ -58,7 +59,7 @@ Every item from the task brief, and where it's done.
 | 7. Scan reliability          | Rule-based hints (contrast, inverted colours, quiet zone, module size, logo, density) and a real decode test with jsQR at full size and at 200 px. Fixes are one click.                                                                                | `src/lib/contrast.ts`, `src/lib/scanRules.ts`, `src/lib/scanCheck.ts`, `src/components/ScanCheck.tsx` |
 | 8. Recent QR codes           | Saved to localStorage on download or copy. Keeps the latest 12 with no duplicates, survives a refresh, and restores everything with one click. Each item can be removed, and "Clear all" asks first. Corrupt data or a full quota never crash the app. | `src/state/recent.ts`, `src/hooks/useRecent.ts`, `src/components/RecentList.tsx`                      |
 | 9. Responsive design         | Two columns on desktop with the preview sticky; on phones the preview comes first and the export buttons are pinned to the bottom. No horizontal scroll from 360 px up, and touch targets are at least 44 px.                                          | `src/styles/layout.css`, `e2e/responsive.spec.ts`                                                     |
-| 10. Testing                  | 183 unit tests (Vitest) and 103 end-to-end tests (Playwright). Every QR type, option and preset is downloaded and decoded, plus invalid input, persistence, layout at 4 widths and axe in both themes. CI runs it all on every push.                   | `src/**/*.test.ts`, `e2e/`, `.github/workflows/ci.yml`, [TESTING.md](TESTING.md)                      |
+| 10. Testing                  | 183 unit tests (Vitest) and 104 end-to-end tests (Playwright). Every QR type, option and preset is downloaded and decoded, plus invalid input, persistence, layout at 4 widths and axe in both themes. CI runs it all on every push.                   | `src/**/*.test.ts`, `e2e/`, `.github/workflows/ci.yml`, [TESTING.md](TESTING.md)                      |
 | Optional: SVG download       | SVG export with the logo embedded as a data URL, so the file works on its own.                                                                                                                                                                         | `src/lib/exportQr.ts`                                                                                 |
 | Optional: logo               | PNG, JPG or SVG up to 2 MB (anything else gets a clear message), with size, padding, "clear the dots behind it" and remove.                                                                                                                            | `src/components/LogoPanel.tsx`, `src/lib/image.ts`                                                    |
 | Optional: gradient QR codes  | Off, linear (with an angle) or radial, on the dots. Corners keep solid colours that follow the dot colour until you pick your own.                                                                                                                     | `src/components/ColourPanel.tsx`, `src/lib/qrConfig.ts`                                               |
@@ -168,7 +169,7 @@ How to run everything, and a manual checklist for what automation can't cover, a
   - every scan rule and its fix
   - the reducer and presets
   - recent-code storage, including corrupt data and a full quota
-- **103 end-to-end tests (Playwright):**
+- **104 end-to-end tests (Playwright):**
   - every type and every customisation downloaded as PNG and SVG and decoded
   - every preset decoded for every type
   - clipboard copy decoded
