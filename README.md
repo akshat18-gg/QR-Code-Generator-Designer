@@ -212,7 +212,7 @@ Lighthouse (mobile) on the live site:
 | ----------- | ------------- | -------------- | --- |
 | 99–100      | 100           | 100            | 100 |
 
-These are three runs on the live site. Performance started at 95. Inlining the 3 KB stylesheet and loading jsQR on demand fixed the two things Lighthouse flagged. The header intro only animates transform and opacity in a fixed-size box, and the preview box reserves its space, so layout shift stays at 0.
+These are three runs on the live site, after the pixel grid, colour strip and confetti went in (desktop scores 100 in every category). Performance started at 95. Inlining the 3 KB stylesheet and loading jsQR on demand fixed the two things Lighthouse flagged. The header intro and the colour strip only animate transform and opacity in fixed-size boxes, the pixel grid is one canvas whose loop stops as soon as nothing is lit, and the preview box reserves its space, so layout shift stays at 0 and total blocking time at 10 to 20 ms.
 
 ## Run locally
 
