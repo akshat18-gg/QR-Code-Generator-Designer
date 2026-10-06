@@ -29,11 +29,15 @@ function store(theme: Theme) {
 
 // Fades colours for one theme switch only. A permanent transition on every
 // element would also slow down hover states and fight other transitions.
+// A second click restarts the timer, so the first one can't cut its fade short.
+let fadeTimer = 0;
+
 function fadeColours() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const root = document.documentElement;
   root.classList.add('theme-fade');
-  window.setTimeout(() => root.classList.remove('theme-fade'), FADE_MS + 50);
+  window.clearTimeout(fadeTimer);
+  fadeTimer = window.setTimeout(() => root.classList.remove('theme-fade'), FADE_MS + 50);
 }
 
 export function useTheme() {
