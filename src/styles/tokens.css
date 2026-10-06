@@ -15,6 +15,7 @@
   --speed: 120ms;
   --slide: 200ms;
   --morph: 300ms;
+  --strip: 300ms;
 
   --paper: #eef3f8;
   --sheet: #f9fbfd;
@@ -86,5 +87,6 @@
     --speed: 0ms;
     --slide: 0ms;
     --morph: 0ms;
+    --strip: 0ms;
   }
 }

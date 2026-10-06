@@ -10,6 +10,18 @@ export const TYPE_LABELS: Record<QrType, string> = {
   wifi: 'Wi-Fi',
 };
 
+export const COLOURS = ['blue', 'red', 'yellow', 'green'] as const;
+export type Colour = (typeof COLOURS)[number];
+
+// Each type tab owns one of the four colours. Wi-Fi gets all four.
+export const TYPE_COLOURS: Record<QrType, Colour | null> = {
+  url: 'blue',
+  text: 'red',
+  email: 'yellow',
+  phone: 'green',
+  wifi: null,
+};
+
 export interface UrlInput {
   url: string;
 }

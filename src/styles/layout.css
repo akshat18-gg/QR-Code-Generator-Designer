@@ -305,3 +305,62 @@
     scrollbar-width: thin;
   }
 }
+
+/* Colour strip along the top edge. Fixed height, and the segments only move
+   with transform, so nothing below it ever shifts. */
+.colour-strip {
+  position: relative;
+  height: 4px;
+  overflow: hidden;
+}
+
+.strip-segment,
+.strip-shimmer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.strip-segment {
+  width: 100%;
+  transform-origin: left;
+  transition: transform var(--strip) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.strip-blue {
+  background: var(--g-blue);
+}
+
+.strip-red {
+  background: var(--g-red);
+}
+
+.strip-yellow {
+  background: var(--g-yellow);
+}
+
+.strip-green {
+  background: var(--g-green);
+}
+
+/* Travels across in the first 60% of the cycle, then rests. */
+.strip-shimmer {
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.75), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  60%,
+  100% {
+    transform: translateX(340%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip-shimmer {
+    display: none;
+  }
+}

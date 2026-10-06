@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
-import { QR_TYPES, TYPE_LABELS, type QrType } from '../lib/types';
+import { QR_TYPES, TYPE_COLOURS, TYPE_LABELS, type QrType } from '../lib/types';
 
 interface TypeTabsProps {
   value: QrType;
@@ -8,6 +8,8 @@ interface TypeTabsProps {
 }
 
 const PANEL_ID = 'content-panel';
+// Matches .type-underline's width in the CSS.
+const UNDERLINE_PX = 100;
 
 export function TypeTabs({ value, onChange, children }: TypeTabsProps) {
   const refs = useRef<Partial<Record<QrType, HTMLButtonElement | null>>>({});
@@ -77,8 +79,11 @@ export function TypeTabs({ value, onChange, children }: TypeTabsProps) {
         {underline && (
           <span
             className="type-underline"
+            data-colour={TYPE_COLOURS[value] ?? 'all'}
             aria-hidden="true"
-            style={{ transform: `translateX(${underline.left}px) scaleX(${underline.width})` }}
+            style={{
+              transform: `translateX(${underline.left}px) scaleX(${underline.width / UNDERLINE_PX})`,
+            }}
           />
         )}
       </div>

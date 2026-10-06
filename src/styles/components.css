@@ -53,16 +53,42 @@
   color: var(--ink);
 }
 
-/* 1px wide, scaled to the tab's width, so moving it is a pure transform. */
+/* Scaled to the tab's width, so moving it is a pure transform. 100px wide
+   rather than 1px so the four-colour Wi-Fi version keeps sharp bands. It takes
+   the selected tab's colour, in the shade that passes 3:1. */
 .type-underline {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 1px;
+  width: 100px;
   height: 2px;
-  background: var(--accent);
+  background-color: var(--blue-ui);
   transform-origin: left;
-  transition: transform var(--slide) ease-out;
+  transition:
+    transform var(--slide) ease-out,
+    background-color var(--slide);
+}
+
+.type-underline[data-colour='red'] {
+  background-color: var(--red-ui);
+}
+
+.type-underline[data-colour='yellow'] {
+  background-color: var(--yellow-ui);
+}
+
+.type-underline[data-colour='green'] {
+  background-color: var(--green-ui);
+}
+
+.type-underline[data-colour='all'] {
+  background-image: linear-gradient(
+    90deg,
+    var(--blue-ui) 25%,
+    var(--red-ui) 25% 50%,
+    var(--yellow-ui) 50% 75%,
+    var(--green-ui) 75%
+  );
 }
 
 .type-tab:focus-visible {

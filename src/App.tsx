@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ColourPanel } from './components/ColourPanel';
+import { ColourStrip } from './components/ColourStrip';
 import { ConfirmPopover } from './components/ConfirmPopover';
 import { ContentForm } from './components/ContentForm';
 import { ExportBar } from './components/ExportBar';
@@ -54,84 +55,93 @@ export default function App() {
   }
 
   return (
-    <div className="app">
-      <a className="skip-link" href="#output">
-        Skip to preview
-      </a>
-      <Masthead />
-      <main className="workspace">
-        <div className="controls">
-          <Group id="content" title="Content">
-            <TypeTabs
-              value={state.type}
-              onChange={(qrType) => dispatch({ type: 'setType', qrType })}
+    <>
+      <ColourStrip type={state.type} />
+      <div className="app">
+        <a className="skip-link" href="#output">
+          Skip to preview
+        </a>
+        <Masthead />
+        <main className="workspace">
+          <div className="controls">
+            <Group id="content" title="Content">
+              <TypeTabs
+                value={state.type}
+                onChange={(qrType) => dispatch({ type: 'setType', qrType })}
+              >
+                <ContentForm state={state} errors={errors} status={status} dispatch={dispatch} />
+              </TypeTabs>
+            </Group>
+            <Group
+              id="presets"
+              title="Presets"
+              aside={<span className="group-aside">{preset ? preset.name : 'Custom'}</span>}
             >
-              <ContentForm state={state} errors={errors} status={status} dispatch={dispatch} />
-            </TypeTabs>
-          </Group>
-          <Group
-            id="presets"
-            title="Presets"
-            aside={<span className="group-aside">{preset ? preset.name : 'Custom'}</span>}
-          >
-            <PresetList
-              style={style}
-              source={preview.source}
-              activeId={preset?.id}
-              dispatch={dispatch}
-            />
-          </Group>
-          <Group id="pattern" title="Pattern">
-            <PatternPanel style={style} dispatch={dispatch} />
-          </Group>
-          <Group id="colour" title="Colour">
-            <ColourPanel style={style} dispatch={dispatch} />
-          </Group>
-          <Group id="logo" title="Logo">
-            <LogoPanel style={style} dispatch={dispatch} />
-          </Group>
-          <Group id="size" title="Size">
-            <SizePanel style={style} dispatch={dispatch} />
-          </Group>
-          <Group
-            id="recent"
-            title="Recent"
-            aside={
-              recent.items.length > 0 && (
-                <ConfirmPopover
-                  label="Clear all"
-                  question={`Remove all ${recent.items.length} recent codes? This can't be undone.`}
-                  confirmLabel="Remove all"
-                  onConfirm={recent.clear}
-                />
-              )
-            }
-          >
-            <RecentList
-              items={recent.items}
-              problem={recent.problem}
-              onLoad={loadRecent}
-              onRemove={recent.remove}
-            />
-          </Group>
-        </div>
-        <aside className="output">
-          {/* Focusable so keyboard users can scroll it when it's taller than the
-              screen; also the skip link's target. */}
-          <div className="output-inner" id="output" role="region" aria-label="Preview" tabIndex={0}>
-            <Preview status={status} options={preview.options} style={style} />
-            <Group id="export" title="Export">
-              <ExportBar
-                type={state.type}
-                status={status}
-                options={qrOptions}
-                onExported={saveRecent}
+              <PresetList
+                style={style}
+                source={preview.source}
+                activeId={preset?.id}
+                dispatch={dispatch}
               />
             </Group>
-            <ScanCheck status={status} style={style} check={check} dispatch={dispatch} />
+            <Group id="pattern" title="Pattern">
+              <PatternPanel style={style} dispatch={dispatch} />
+            </Group>
+            <Group id="colour" title="Colour">
+              <ColourPanel style={style} dispatch={dispatch} />
+            </Group>
+            <Group id="logo" title="Logo">
+              <LogoPanel style={style} dispatch={dispatch} />
+            </Group>
+            <Group id="size" title="Size">
+              <SizePanel style={style} dispatch={dispatch} />
+            </Group>
+            <Group
+              id="recent"
+              title="Recent"
+              aside={
+                recent.items.length > 0 && (
+                  <ConfirmPopover
+                    label="Clear all"
+                    question={`Remove all ${recent.items.length} recent codes? This can't be undone.`}
+                    confirmLabel="Remove all"
+                    onConfirm={recent.clear}
+                  />
+                )
+              }
+            >
+              <RecentList
+                items={recent.items}
+                problem={recent.problem}
+                onLoad={loadRecent}
+                onRemove={recent.remove}
+              />
+            </Group>
           </div>
-        </aside>
-      </main>
-    </div>
+          <aside className="output">
+            {/* Focusable so keyboard users can scroll it when it's taller than the
+              screen; also the skip link's target. */}
+            <div
+              className="output-inner"
+              id="output"
+              role="region"
+              aria-label="Preview"
+              tabIndex={0}
+            >
+              <Preview status={status} options={preview.options} style={style} />
+              <Group id="export" title="Export">
+                <ExportBar
+                  type={state.type}
+                  status={status}
+                  options={qrOptions}
+                  onExported={saveRecent}
+                />
+              </Group>
+              <ScanCheck status={status} style={style} check={check} dispatch={dispatch} />
+            </div>
+          </aside>
+        </main>
+      </div>
+    </>
   );
 }
