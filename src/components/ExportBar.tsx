@@ -1,5 +1,6 @@
 import type { Options } from 'qr-code-styling';
 import { useEffect, useState } from 'react';
+import { burst } from '../lib/confetti';
 import { canCopyImage, copyPng, downloadBlob, renderBlob } from '../lib/exportQr';
 import { exportFilename } from '../lib/filename';
 import type { QrStatus } from '../lib/status';
@@ -27,13 +28,14 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
     return () => window.clearTimeout(id);
   }, [notice]);
 
-  async function download(extension: 'png' | 'svg') {
-    if (!options) return;
+  async function download(extension: 'png' | 'svg', button: HTMLElement) {
+    if (!options || busy) return;
     setBusy(true);
     try {
       const blob = await renderBlob(options, extension);
       downloadBlob(blob, exportFilename(type, extension));
       setNotice({ text: `Saved ${extension.toUpperCase()}`, tone: 'ok' });
+      burst(button);
       onExported();
     } catch {
       setNotice({ text: "Couldn't make the file. Try again.", tone: 'error' });
@@ -42,8 +44,8 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
     }
   }
 
-  async function copy() {
-    if (!options) return;
+  async function copy(button: HTMLElement) {
+    if (!options || busy) return;
     if (!canCopyImage()) {
       setNotice({
         text: "This browser can't copy images. Download the PNG instead.",
@@ -55,6 +57,7 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
     try {
       await copyPng(options);
       setNotice({ text: 'Copied', tone: 'ok' });
+      burst(button);
       onExported();
     } catch {
       setNotice({
@@ -66,7 +69,10 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
     }
   }
 
-  const disabled = !ready || busy;
+  // While a file is being made the buttons only say they're unavailable: a
+  // disabled button would drop keyboard focus back to the page.
+  const disabled = !ready;
+  const unavailable = busy || undefined;
 
   return (
     <div className="export-bar">
@@ -75,8 +81,9 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
           type="button"
           className="button button-primary"
           disabled={disabled}
+          aria-disabled={unavailable}
           aria-describedby={ready ? undefined : 'export-reason'}
-          onClick={() => void download('png')}
+          onClick={(event) => void download('png', event.currentTarget)}
         >
           Download PNG
         </button>
@@ -84,8 +91,9 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
           type="button"
           className="button"
           disabled={disabled}
+          aria-disabled={unavailable}
           aria-describedby={ready ? undefined : 'export-reason'}
-          onClick={() => void download('svg')}
+          onClick={(event) => void download('svg', event.currentTarget)}
         >
           SVG
         </button>
@@ -93,8 +101,9 @@ export function ExportBar({ type, status, options, onExported }: ExportBarProps)
           type="button"
           className="button"
           disabled={disabled}
+          aria-disabled={unavailable}
           aria-describedby={ready ? undefined : 'export-reason'}
-          onClick={() => void copy()}
+          onClick={(event) => void copy(event.currentTarget)}
         >
           Copy
         </button>

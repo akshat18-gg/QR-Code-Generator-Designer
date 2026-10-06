@@ -541,3 +541,17 @@
   gap: var(--space-2);
   margin-top: var(--space-3);
 }
+
+/* Confetti from the export buttons (src/lib/confetti.ts). */
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  border-radius: 1px;
+}
