@@ -10,6 +10,11 @@ import './styles/layout.css';
 import './styles/controls.css';
 import './styles/components.css';
 import App from './App';
+import { migrateStorage } from './state/migrate';
+import { getStorage } from './state/recent';
+
+// Before the first render, so the recent list and theme read the new keys.
+migrateStorage(getStorage());
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing #root element');

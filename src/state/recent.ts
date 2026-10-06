@@ -2,7 +2,7 @@ import type { Style } from '../lib/style';
 import { QR_TYPES, type Inputs, type QrType } from '../lib/types';
 import { DEFAULT_STYLE } from './editor';
 
-export const RECENT_KEY = 'quietzone:recent:v1';
+export const RECENT_KEY = 'qraft:recent:v1';
 export const RECENT_LIMIT = 12;
 
 export type RecentEntry = { [K in QrType]: { type: K; input: Inputs[K]; style: Style } }[QrType];
@@ -16,7 +16,7 @@ export type RecentItem = RecentEntry & {
 type StorageLike = Pick<Storage, 'getItem' | 'setItem'>;
 
 // localStorage itself can throw on access (Safari private mode, blocked cookies).
-export function getStorage(): StorageLike | null {
+export function getStorage(): Storage | null {
   try {
     return window.localStorage;
   } catch {

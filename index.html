@@ -29,7 +29,9 @@
       (function () {
         var theme;
         try {
-          theme = localStorage.getItem('quietzone:theme');
+          // The old key covers the first visit after the rename to QRaft,
+          // before the app has moved it (see src/state/migrate.ts).
+          theme = localStorage.getItem('qraft:theme') || localStorage.getItem('quietzone:theme');
         } catch (e) {}
         if (theme !== 'light' && theme !== 'dark') {
           theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

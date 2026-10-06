@@ -134,14 +134,18 @@ test('hovering the logo mark replays the scan line once', async ({ page }) => {
   expect(await sweeps()).toBe(0);
 });
 
-test('the saved theme is applied before first paint', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('quietzone:theme', 'dark'));
-  await page.emulateMedia({ colorScheme: 'light' });
-  // Block the app bundle so only the HTML's inline script can have set the theme.
-  await page.route('**/assets/*.js', (route) => route.abort());
-  await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-});
+// The old key is from before the rename to QRaft; the app migrates it, but the
+// first visit after the rename has to read it before the app loads.
+for (const key of ['qraft:theme', 'quietzone:theme']) {
+  test(`the theme saved under ${key} is applied before first paint`, async ({ page }) => {
+    await page.addInitScript((k) => localStorage.setItem(k, 'dark'), key);
+    await page.emulateMedia({ colorScheme: 'light' });
+    // Block the app bundle so only the HTML's inline script can have set the theme.
+    await page.route('**/assets/*.js', (route) => route.abort());
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  });
+}
 
 test('every control can be reached with the keyboard and shows a focus ring', async ({ page }) => {
   await page.goto('/');

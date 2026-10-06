@@ -167,3 +167,25 @@ test('a full storage quota shows a message instead of crashing', async ({ page }
   await expect(recentList(page)).toHaveCount(1);
   expect(errors).toEqual([]);
 });
+
+test('recent codes and the theme saved by Quiet Zone move to the QRaft keys', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto('/');
+  await saveUrl(page, 'example.com');
+  await expect(recentList(page)).toHaveCount(1);
+
+  // Put the data back where the app stored it before the rename.
+  await page.evaluate((key) => {
+    localStorage.setItem('quietzone:recent:v1', localStorage.getItem(key) ?? '');
+    localStorage.setItem('quietzone:theme', 'dark');
+    localStorage.removeItem(key);
+    localStorage.removeItem('qraft:theme');
+  }, RECENT_KEY);
+
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(recentList(page)).toHaveCount(1);
+  await expect(recentList(page).first()).toContainText('example.com');
+  const keys = await page.evaluate(() => Object.keys(localStorage).sort());
+  expect(keys).toEqual(['qraft:recent:v1', 'qraft:theme']);
+});

@@ -4,7 +4,7 @@ export type Theme = 'light' | 'dark';
 
 // Must match the inline script in index.html, which applies the theme before
 // React loads so the page never flashes the wrong colours.
-const THEME_KEY = 'quietzone:theme';
+export const THEME_KEY = 'qraft:theme';
 const PAPER: Record<Theme, string> = { light: '#eef3f8', dark: '#0d1520' };
 const FADE_MS = 200;
 
