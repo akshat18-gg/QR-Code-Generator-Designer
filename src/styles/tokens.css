@@ -23,13 +23,32 @@
   --rule: #d2dce7;
   --rule-strong: #6f8094;
   --hover: #e1e9f2;
-  --accent: #b23a0c;
+  --accent: #1a73e8;
   --error: #b42318;
   --ok: #2a6a3a;
   --warn: #835200;
-  --focus: #b23a0c;
+  --focus: #1a73e8;
 
   --grid: rgb(19 33 47 / 0.04);
+
+  /* The four Google colours, exactly, for decoration only: the header's pixel
+     grid, the colour strip and the confetti. */
+  --g-blue: #4285f4;
+  --g-red: #ea4335;
+  --g-yellow: #fbbc04;
+  --g-green: #34a853;
+
+  /* Shades of the same four for anything that shows state, such as the tab
+     underline. Each is at least 3:1 on paper, sheet and hover (tokens.test.ts). */
+  --blue-ui: #1a73e8;
+  --red-ui: #d93025;
+  --yellow-ui: #9a6700;
+  --green-ui: #188038;
+
+  /* Header pixel grid and confetti, tuned per theme. */
+  --pixel-rest: rgb(19 33 47 / 0.05);
+  --pixel-lit: 0.7;
+  --confetti: 1;
 
   color-scheme: light;
 }
@@ -42,13 +61,22 @@
   --rule: #213146;
   --rule-strong: #6a7f97;
   --hover: #1a293c;
-  --accent: #f08a4b;
+  --accent: #8ab4f8;
   --error: #f2877c;
   --ok: #7cc28a;
   --warn: #e3b55a;
-  --focus: #f08a4b;
+  --focus: #8ab4f8;
 
   --grid: rgb(230 237 245 / 0.04);
+
+  --blue-ui: #4285f4;
+  --red-ui: #ea4335;
+  --yellow-ui: #fbbc04;
+  --green-ui: #34a853;
+
+  --pixel-rest: rgb(230 237 245 / 0.05);
+  --pixel-lit: 0.6;
+  --confetti: 0.9;
 
   color-scheme: dark;
 }
