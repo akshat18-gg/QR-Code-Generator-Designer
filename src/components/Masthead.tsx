@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
+import { PixelGrid } from './PixelGrid';
 import { ThemeToggle } from './ThemeToggle';
 
 const TAGLINE = 'Craft QR codes that scan.';
@@ -24,7 +25,7 @@ const SWEEP: Keyframe[] = [
   { opacity: 0, transform: 'translateY(9px)' },
 ];
 
-function LogoMark() {
+function LogoMark({ ref }: { ref: RefObject<SVGSVGElement | null> }) {
   const scan = useRef<SVGRectElement>(null);
 
   function replay() {
@@ -36,6 +37,7 @@ function LogoMark() {
 
   return (
     <svg
+      ref={ref}
       className="mark"
       viewBox="-1 -1 9 9"
       shapeRendering="crispEdges"
@@ -97,16 +99,23 @@ function DecodingText() {
 }
 
 export function Masthead() {
+  const header = useRef<HTMLElement>(null);
+  const words = useRef<HTMLDivElement>(null);
+  const mark = useRef<SVGSVGElement>(null);
+
   return (
-    <header className="masthead">
-      <div className="brand">
-        <LogoMark />
-        <div>
-          <h1 className="title">QRaft</h1>
-          <DecodingText />
+    <header className="masthead" ref={header}>
+      <PixelGrid area={header} text={words} origin={mark} />
+      <div className="masthead-inner">
+        <div className="brand">
+          <LogoMark ref={mark} />
+          <div ref={words}>
+            <h1 className="title">QRaft</h1>
+            <DecodingText />
+          </div>
         </div>
+        <ThemeToggle />
       </div>
-      <ThemeToggle />
     </header>
   );
 }

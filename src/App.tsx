@@ -56,12 +56,12 @@ export default function App() {
 
   return (
     <>
+      <a className="skip-link" href="#output">
+        Skip to preview
+      </a>
       <ColourStrip type={state.type} />
+      <Masthead />
       <div className="app">
-        <a className="skip-link" href="#output">
-          Skip to preview
-        </a>
-        <Masthead />
         <main className="workspace">
           <div className="controls">
             <Group id="content" title="Content">

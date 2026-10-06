@@ -22,13 +22,31 @@
   transform: none;
 }
 
+/* The header spans the whole width so its pixel grid can; the content inside
+   lines up with the page column. */
 .masthead {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Never takes clicks: the pointer is tracked on the header itself. */
+.pixel-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.masthead-inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-5) 0 var(--space-4);
-  border-bottom: 1px solid var(--rule);
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-5) var(--space-4);
 }
 
 .brand {
@@ -234,6 +252,10 @@
 @media (max-width: 860px) {
   .app {
     padding: 0 var(--space-4) var(--space-7);
+  }
+
+  .masthead-inner {
+    padding-inline: var(--space-4);
   }
 
   .workspace {

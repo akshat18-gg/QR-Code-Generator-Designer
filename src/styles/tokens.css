@@ -47,8 +47,8 @@
   --green-ui: #188038;
 
   /* Header pixel grid and confetti, tuned per theme. */
-  --pixel-rest: rgb(19 33 47 / 0.05);
-  --pixel-lit: 0.7;
+  --pixel-rest: rgb(19 33 47 / 0.025);
+  --pixel-lit: 0.8;
   --confetti: 1;
 
   color-scheme: light;
@@ -75,8 +75,8 @@
   --yellow-ui: #fbbc04;
   --green-ui: #34a853;
 
-  --pixel-rest: rgb(230 237 245 / 0.05);
-  --pixel-lit: 0.6;
+  --pixel-rest: rgb(230 237 245 / 0.03);
+  --pixel-lit: 0.85;
   --confetti: 0.9;
 
   color-scheme: dark;
