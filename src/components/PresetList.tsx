@@ -15,7 +15,7 @@ interface PresetListProps {
 }
 
 const THUMB_SIZE = 96;
-const SAMPLE = analyse('Quiet Zone', 'M');
+const SAMPLE = analyse('QRaft', 'M');
 const SAMPLE_SOURCE: QrSource | null = SAMPLE.ok ? SAMPLE : null;
 
 export function PresetList({ style, source, activeId, dispatch }: PresetListProps) {

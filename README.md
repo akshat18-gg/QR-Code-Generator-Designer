@@ -1,10 +1,10 @@
-# Quiet Zone
+# QRaft
 
 [![CI](https://github.com/akshat18-gg/QR-Code-Generator-Designer/actions/workflows/ci.yml/badge.svg)](https://github.com/akshat18-gg/QR-Code-Generator-Designer/actions/workflows/ci.yml)
 
-Quiet Zone is a QR code generator and designer that runs entirely in the browser. You pick what the code should hold (a link, text, an email, a phone number or Wi-Fi details), style it, and download it as PNG or SVG. Before you print it, a scan check reads the code back and tells you if anything you changed made it harder to scan.
+QRaft is a QR code generator and designer that runs entirely in the browser. You pick what the code should hold (a link, text, an email, a phone number or Wi-Fi details), style it, and download it as PNG or SVG. Before you print it, a scan check reads the code back and tells you if anything you changed made it harder to scan.
 
-The name comes from the blank border around a QR code. Scanners need it to find the code, and it's the first thing people crop off.
+QRaft = QR + craft: you craft a QR code, then check that it scans.
 
 **Live:** https://qr-code-generator-designer.vercel.app/
 

@@ -103,7 +103,7 @@ test('the toggle is a 44px round button with a focus ring', async ({ page }) => 
 test('with reduced motion the header shows its final state straight away', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.tagline [aria-hidden]')).toHaveText('QR codes that scan.');
+  await expect(page.locator('.tagline [aria-hidden]')).toHaveText('Craft QR codes that scan.');
   const animations = await page.evaluate(
     () => document.getAnimations().filter((a) => a.playState === 'running').length,
   );
@@ -112,8 +112,8 @@ test('with reduced motion the header shows its final state straight away', async
 
 test('the tagline decodes to the real text', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.tagline [aria-hidden]')).toHaveText('QR codes that scan.');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quiet Zone');
+  await expect(page.locator('.tagline [aria-hidden]')).toHaveText('Craft QR codes that scan.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('QRaft');
 });
 
 test('hovering the logo mark replays the scan line once', async ({ page }) => {

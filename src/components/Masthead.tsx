@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ThemeToggle } from './ThemeToggle';
 
-const TAGLINE = 'QR codes that scan.';
+const TAGLINE = 'Craft QR codes that scan.';
 const GLYPHS = '#%&*+=/<>?$@0123456789ABCDEFXZ';
 const DECODE_MS = 600;
 
@@ -102,7 +102,7 @@ export function Masthead() {
       <div className="brand">
         <LogoMark />
         <div>
-          <h1 className="title">Quiet Zone</h1>
+          <h1 className="title">QRaft</h1>
           <DecodingText />
         </div>
       </div>

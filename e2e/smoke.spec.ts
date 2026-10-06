@@ -10,7 +10,7 @@ test('loads without console errors or warnings', async ({ page }) => {
   page.on('pageerror', (err) => messages.push(err.message));
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Quiet Zone');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('QRaft');
   await page.evaluate(() => navigator.serviceWorker.ready);
   expect(messages).toEqual([]);
 });

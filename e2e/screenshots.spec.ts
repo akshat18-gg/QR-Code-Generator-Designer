@@ -74,7 +74,7 @@ test.describe('desktop', () => {
       [
         {
           type: 'wifi',
-          values: { ssid: 'SRM Library', security: 'WPA', password: 'quietzone4', hidden: false },
+          values: { ssid: 'SRM Library', security: 'WPA', password: 'qraft2026', hidden: false },
         },
         'Receipt',
       ],
@@ -103,7 +103,7 @@ test.describe('desktop', () => {
       .getByRole('radio', { name: 'H' })
       .check();
     await page.locator('input[type=file]').setInputFiles({
-      name: 'quiet-zone.svg',
+      name: 'qraft.svg',
       mimeType: 'image/svg+xml',
       buffer: await readFile('public/favicon.svg'),
     });

@@ -7,7 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 // a render-blocking request on slow mobile connections.
 function inlineCss(): Plugin {
   return {
-    name: 'quiet-zone:inline-css',
+    name: 'qraft:inline-css',
     apply: 'build',
     enforce: 'post',
     generateBundle(_options, bundle) {
@@ -34,10 +34,10 @@ export default defineConfig({
       injectRegister: 'script-defer',
       pwaAssets: { config: true, overrideManifestIcons: true },
       manifest: {
-        name: 'Quiet Zone',
-        short_name: 'Quiet Zone',
+        name: 'QRaft',
+        short_name: 'QRaft',
         description:
-          'Make and style QR codes in the browser, and check they scan before you print them.',
+          'Craft and style QR codes in the browser, and check they scan before you print them.',
         theme_color: '#eef3f8',
         background_color: '#eef3f8',
         display: 'standalone',

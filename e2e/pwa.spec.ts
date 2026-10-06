@@ -17,7 +17,7 @@ test('works offline after the first visit', async ({ page, context }) => {
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Quiet Zone');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('QRaft');
   expect(await page.evaluate(() => document.fonts.check('16px "IBM Plex Sans"'))).toBe(true);
 
   await fillInputs(page, { type: 'text', values: { text: 'Works with no signal' } });
@@ -37,8 +37,8 @@ test('has an installable manifest', async ({ page, request }) => {
   expect(response.ok()).toBe(true);
   const manifest = await response.json();
   expect(manifest).toMatchObject({
-    name: 'Quiet Zone',
-    short_name: 'Quiet Zone',
+    name: 'QRaft',
+    short_name: 'QRaft',
     display: 'standalone',
     start_url: '/',
   });
