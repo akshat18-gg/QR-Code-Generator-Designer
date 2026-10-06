@@ -116,6 +116,24 @@ test('the tagline decodes to the real text', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quiet Zone');
 });
 
+test('hovering the logo mark replays the scan line once', async ({ page }) => {
+  await page.goto('/');
+  const mark = page.locator('.mark');
+  const sweeps = () =>
+    page.evaluate(() => document.querySelector('.mark-scan')?.getAnimations().length ?? 0);
+  // Let the load-time intro finish first.
+  await expect.poll(sweeps).toBe(0);
+
+  await mark.hover();
+  expect(await sweeps()).toBe(1);
+  await expect.poll(sweeps).toBe(0);
+
+  // Moving away must not start another sweep.
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(800);
+  expect(await sweeps()).toBe(0);
+});
+
 test('the saved theme is applied before first paint', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('quietzone:theme', 'dark'));
   await page.emulateMedia({ colorScheme: 'light' });

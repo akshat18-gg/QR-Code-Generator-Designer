@@ -54,8 +54,9 @@
 }
 
 /* Logo mark: a QR finder pattern. On load its modules pop in along the
-   diagonal, then a scan line sweeps down once; hovering replays the sweep.
-   Only transform and opacity animate, and the box has a fixed size. */
+   diagonal, then a scan line sweeps down once; hovering replays the sweep
+   (see Masthead). Only transform and opacity animate, and the box has a
+   fixed size. */
 .mark {
   flex: none;
   width: 48px;
@@ -75,10 +76,6 @@
   animation: scan 320ms ease-in-out 620ms;
 }
 
-.mark:hover .mark-scan {
-  animation: scan-again 420ms ease-in-out;
-}
-
 @keyframes module-in {
   from {
     opacity: 0;
@@ -96,21 +93,9 @@
   }
 }
 
-/* Same sweep under a new name, so hovering restarts it. */
-@keyframes scan-again {
-  15%,
-  85% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateY(9px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .mark-module,
-  .mark-scan,
-  .mark:hover .mark-scan {
+  .mark-scan {
     animation: none;
   }
 }

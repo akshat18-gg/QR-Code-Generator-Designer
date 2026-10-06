@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ThemeToggle } from './ThemeToggle';
 
 const TAGLINE = 'QR codes that scan.';
@@ -15,7 +15,25 @@ for (let y = 0; y < 7; y++) {
   }
 }
 
+// The load-time sweep is a CSS animation. Hover replays it from script, because
+// swapping CSS animations on :hover also restarts one when the pointer leaves.
+const SWEEP: Keyframe[] = [
+  { opacity: 0, transform: 'translateY(0)' },
+  { opacity: 0.85, offset: 0.15 },
+  { opacity: 0.85, offset: 0.85 },
+  { opacity: 0, transform: 'translateY(9px)' },
+];
+
 function LogoMark() {
+  const scan = useRef<SVGRectElement>(null);
+
+  function replay() {
+    const line = scan.current;
+    if (!line || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (line.getAnimations().some((animation) => animation.playState === 'running')) return;
+    line.animate(SWEEP, { duration: 420, easing: 'ease-in-out' });
+  }
+
   return (
     <svg
       className="mark"
@@ -23,6 +41,7 @@ function LogoMark() {
       shapeRendering="crispEdges"
       aria-hidden="true"
       focusable="false"
+      onPointerEnter={replay}
     >
       {MODULES.map(({ x, y }) => (
         <rect
@@ -36,7 +55,7 @@ function LogoMark() {
           style={{ animationDelay: `${(x + y) * 35}ms` }}
         />
       ))}
-      <rect className="mark-scan" x="-1" y="-1" width="9" height="0.6" />
+      <rect ref={scan} className="mark-scan" x="-1" y="-1" width="9" height="0.6" />
     </svg>
   );
 }
