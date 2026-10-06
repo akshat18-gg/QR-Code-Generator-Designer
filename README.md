@@ -24,6 +24,10 @@ I built this for the GDG on Campus SRM recruitment task (Frontend, Task 1: QR Co
 | ------------------------------------------ | --------------------------------------- |
 | ![Wi-Fi error](screenshots/wifi-error.png) | ![Recent codes](screenshots/recent.png) |
 
+| Pixel grid header, lit by the pointer                  | Confetti after a download                             |
+| ------------------------------------------------------ | ----------------------------------------------------- |
+| ![Header with a pointer trail](screenshots/header.png) | ![Confetti from the button](screenshots/confetti.png) |
+
 ## Features
 
 - Five QR types: link, plain text, email, phone and Wi-Fi. Each type keeps what you typed when you switch tabs.
@@ -38,9 +42,13 @@ I built this for the GDG on Campus SRM recruitment task (Frontend, Task 1: QR Co
 - Download as PNG at the chosen size, as a standalone SVG, or copy the PNG to the clipboard.
 - Scan check: rule-based hints plus a real decode test, with one-click fixes.
 - The last 12 codes you downloaded or copied, saved in the browser and restored with one click.
-- A "drafting table" look: pale blue-white paper with a faint dot grid, or deep navy in dark mode.
-- A header with a finder-pattern logo that assembles itself and gets a scan-line sweep, and a tagline that decodes in. It plays once (hovering the logo replays the sweep), and not at all with reduced motion.
+- A "drafting table" look: pale blue-white paper with a faint dot grid, or deep navy in dark mode, with the four Google colours as accents.
+- A header with a finder-pattern logo that assembles itself and gets a scan-line sweep, and a tagline that decodes in. It plays once (hovering the logo replays the sweep).
+- A pixel grid behind the header. Squares near the pointer light up in patches of the four colours and fade over 600 ms; a tap on a phone sends out a ripple, and one ripple runs from the logo on load.
+- A colour strip along the top that follows the type tabs: Link is blue, Text red, Email yellow and Phone green, and the selected colour widens to half the bar. On Wi-Fi all four share it and a shimmer runs across. The tab underline takes the same colour.
+- A small burst of pixel confetti from the button when a download or copy works.
 - Small touches, all 200 ms or less: the tab underline slides to the selected tab, preset cards lift their thumbnail on hover, and the preview cross-fades when the code changes.
+- With reduced motion, all of it is still: the grid shows a calm sprinkle of colour, the strip changes instantly and there's no confetti.
 - Light and dark theme, works on phones down to 360 px, keyboard and screen reader friendly.
 - Works offline after the first visit and can be installed as an app.
 
@@ -59,7 +67,7 @@ Every item from the task brief, and where it's done.
 | 7. Scan reliability          | Rule-based hints (contrast, inverted colours, quiet zone, module size, logo, density) and a real decode test with jsQR at full size and at 200 px. Fixes are one click.                                                                                | `src/lib/contrast.ts`, `src/lib/scanRules.ts`, `src/lib/scanCheck.ts`, `src/components/ScanCheck.tsx` |
 | 8. Recent QR codes           | Saved to localStorage on download or copy. Keeps the latest 12 with no duplicates, survives a refresh, and restores everything with one click. Each item can be removed, and "Clear all" asks first. Corrupt data or a full quota never crash the app. | `src/state/recent.ts`, `src/hooks/useRecent.ts`, `src/components/RecentList.tsx`                      |
 | 9. Responsive design         | Two columns on desktop with the preview sticky; on phones the preview comes first and the export buttons are pinned to the bottom. No horizontal scroll from 360 px up, and touch targets are at least 44 px.                                          | `src/styles/layout.css`, `e2e/responsive.spec.ts`                                                     |
-| 10. Testing                  | 183 unit tests (Vitest) and 104 end-to-end tests (Playwright). Every QR type, option and preset is downloaded and decoded, plus invalid input, persistence, layout at 4 widths and axe in both themes. CI runs it all on every push.                   | `src/**/*.test.ts`, `e2e/`, `.github/workflows/ci.yml`, [TESTING.md](TESTING.md)                      |
+| 10. Testing                  | 271 unit tests (Vitest) and 118 end-to-end tests (Playwright). Every QR type, option and preset is downloaded and decoded, plus invalid input, persistence, layout at 4 widths and axe in both themes. CI runs it all on every push.                   | `src/**/*.test.ts`, `e2e/`, `.github/workflows/ci.yml`, [TESTING.md](TESTING.md)                      |
 | Optional: SVG download       | SVG export with the logo embedded as a data URL, so the file works on its own.                                                                                                                                                                         | `src/lib/exportQr.ts`                                                                                 |
 | Optional: logo               | PNG, JPG or SVG up to 2 MB (anything else gets a clear message), with size, padding, "clear the dots behind it" and remove.                                                                                                                            | `src/components/LogoPanel.tsx`, `src/lib/image.ts`                                                    |
 | Optional: gradient QR codes  | Off, linear (with an angle) or radial, on the dots. Corners keep solid colours that follow the dot colour until you pick your own.                                                                                                                     | `src/components/ColourPanel.tsx`, `src/lib/qrConfig.ts`                                               |
@@ -121,11 +129,13 @@ Two things I learned while testing this:
 ```
 src/
   lib/          pure logic, no React: payloads, validation, UTF-8 and overflow, style model,
-                qr-code-styling options, contrast, scan rules, decode test, export, images
-  state/        the editor reducer, presets, recent-codes storage, useEditor hook
+                qr-code-styling options, contrast, scan rules, decode test, export, images,
+                the header's pixel grid model, confetti
+  state/        the editor reducer, presets, recent-codes storage and its migration, useEditor hook
   hooks/        debouncing, drawing a code into a div, scan check, recents, theme
   components/   one small component per panel (TypeTabs, ContentForm, PatternPanel, ColourPanel,
-                LogoPanel, SizePanel, PresetList, Preview, ScanCheck, ExportBar, RecentList, ...)
+                LogoPanel, SizePanel, PresetList, Preview, ScanCheck, ExportBar, RecentList, ...),
+                plus Masthead, PixelGrid and ColourStrip
   styles/       tokens, base, layout, controls, components (plain CSS with custom properties)
 e2e/            Playwright specs and helpers
 ```
@@ -147,6 +157,22 @@ Everything else is derived with `useMemo`: the payload, the field errors, the pr
 
 The preview builds a fresh qr-code-styling instance each time instead of calling `update()`, because `update()` deep-merges options and can't turn a gradient or logo back off.
 
+## Colour and motion
+
+**Two sets of the four colours.** The exact Google colours (blue `#4285F4`, red `#EA4335`, yellow `#FBBC04`, green `#34A853`) are only used for decoration: the pixel grid, the colour strip and the confetti. Anything that shows state, like the tab underline, uses a shade that's at least 3:1 against every surface in that theme. In dark mode the exact colours already pass; on the light paper they're darkened (yellow becomes `#9A6700`, for example). The accent and focus ring moved from orange, which sat awkwardly between the red and yellow, to an accessible Google blue. `src/styles/tokens.test.ts` reads the stylesheet and checks every text colour for 4.5:1 and every control colour for 3:1, in both themes.
+
+**The pixel grid** (`src/lib/pixelField.ts`, drawn by `src/components/PixelGrid.tsx`):
+
+- One canvas, scaled for `devicePixelRatio` and redrawn on resize. The cells sit on the same 16 px grid as the page's dots, so at rest the header looks like the dots grew into faint squares.
+- Each cell's colour comes from ragged 3×2 patches, so colours appear in small groups rather than as noise.
+- The `requestAnimationFrame` loop only runs while a cell is lit or a ripple is moving, and stops when the tab is hidden or the header scrolls out of view.
+- The canvas is `aria-hidden` and has `pointer-events: none`; the pointer is tracked on the header itself, so the theme toggle always gets its clicks.
+- Behind the title and tagline lit cells keep only 12% of their brightness, fading back to full over 32 px, so the text always reads cleanly.
+
+**The colour strip** moves its four segments with `translateX` and `scaleX` only, inside a fixed 4 px bar, so nothing below it shifts.
+
+**Confetti** (`src/lib/confetti.ts`) runs only after a successful download or copy: 24 squares animated with the Web Animations API (transform and opacity), in an overlay that ignores the pointer and is removed when the burst ends. At most two bursts run at once, so repeated clicks don't pile up.
+
 ## Decisions and why
 
 - **qr-code-styling for drawing.** It's the only library I found that does dot styles, corner styles, gradients, logos, and both canvas and SVG output in one place. Writing that myself would have taken the time I wanted for the scan check. Its downsides are the UTF-8 bug and `update()` merging options; I worked around both, as described above.
@@ -156,25 +182,28 @@ The preview builds a fresh qr-code-styling instance each time instead of calling
 - **Offline support.** People often make a QR code right before printing a poster or a label, sometimes on bad Wi-Fi. After the first visit the service worker has everything cached, fonts and the decoder included, so the whole app works without a connection. A Playwright test loads the app, goes offline, reloads and makes a code.
 - **Fonts are self-hosted.** IBM Plex comes from `@fontsource`, latin subset only, in the four weights I use. That's better for offline use and Lighthouse than Google Fonts.
 - **Presets are matched, not stored.** A preset shows as active while your colours and patterns still match it, so any edit to the look shows "Custom" without a flag that could go stale.
+- **Renaming kept everyone's data.** The app used to be called Quiet Zone, and stored its data under `quietzone:` keys. Before the first render, `migrateStorage` copies anything under the old keys to the new `qraft:` ones and then deletes the old keys. If the copy fails (a full quota, say), the old key stays so nothing is lost. The theme script in `index.html` also reads the old key, so the first visit after the rename doesn't flash the wrong theme.
 
 ## Testing and Lighthouse
 
 How to run everything, and a manual checklist for what automation can't cover, are in [TESTING.md](TESTING.md).
 
-- **183 unit tests (Vitest):**
+- **271 unit tests (Vitest):**
   - every payload builder and validator
   - UTF-8 round trips through jsQR
   - overflow at the exact version 40 limits
-  - contrast maths
+  - contrast maths, and the contrast of every colour token in both themes
   - every scan rule and its fix
   - the reducer and presets
-  - recent-code storage, including corrupt data and a full quota
-- **104 end-to-end tests (Playwright):**
+  - recent-code storage, including corrupt data and a full quota, and the move from the old storage keys
+  - the pixel grid model: colour patches, fading, trails and ripples
+- **118 end-to-end tests (Playwright):**
   - every type and every customisation downloaded as PNG and SVG and decoded
   - every preset decoded for every type
   - clipboard copy decoded
   - invalid input, recents across reloads, layout at 360/768/1024/1440, keyboard access, offline mode
   - axe with zero serious or critical issues in both themes
+  - the colour strip following the tabs, the pixel grid reacting (and staying still with reduced motion), confetti appearing and cleaning up, and old Quiet Zone data migrating
 - **CI:** GitHub Actions runs lint, format check, typecheck, unit tests, build and e2e on every push.
 
 Lighthouse (mobile) on the live site:
